@@ -333,6 +333,27 @@ $grad-alt: rgba(57, 170, 155, 1) 0, rgba(126, 203, 42, 1) 33%, rgba(248, 166, 44
   -webkit-text-fill-color: transparent;
 }
 
+// font smoothing
+@mixin smoothing {
+  font-feature-settings: 'liga'1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Truncate lines and use ellipsis
+@mixin truncate-lines($n: 4) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* stylelint-disable value-no-vendor-prefix, property-no-unknown */
+  display: -webkit-box;
+  -webkit-line-clamp: #{$n};
+  box-orient: vertical;
+  -webkit-box-orient: vertical;
+
+  /* xstylelint-enable value-no-vendor-prefix, property-no-unknown */
+}
+
 // Minimum breakpoint width. Null for the smallest (first) breakpoint.
 //
 //    >> breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
