@@ -1,0 +1,65 @@
+// Get raw value
+@function get-value($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+/* Remove the unit of a length
+ * @param {Number} $number - Number to remove unit from
+ * @return {Number} - Unitless number
+ */
+@function strip-units($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return get-value($number);
+  }
+
+  @return $number;
+}
+
+// Convert pixels to rems
+// Assumes $browser-context is the font-size of <html>
+@function rem($pxval, $base: $browser-context) {
+  @if not unitless($pxval) {
+    $pxval: strip-units($pxval);
+  }
+
+  @if not unitless($base) {
+    $base: strip-units($base);
+  }
+
+  @return ($pxval / $base) * 1rem;
+}
+
+// Covert lineheight px to unitless
+@function lh($line-height, $font-size) {
+  @return get-value($line-height / $font-size);
+}
+
+// Ascending
+// Evaluates maps like our grid breakpoints.
+@mixin declare-ascending($map, $map-name) {
+  $prev-key: null;
+  $prev-num: null;
+  @each $key, $num in $map {
+    @if $prev-num == null or unit($num) == '%' or unit($prev-num) == '%' {
+      // Do nothing
+    } @else if not comparable($prev-num, $num) {
+      @warn "Potentially invalid value for #{$map-name}: This map must be in ascending order, but key '#{$key}' has value #{$num} whose unit makes it incomparable to #{$prev-num}, the value of the previous key '#{$prev-key}' !";
+    } @else if $prev-num >= $num {
+      @warn "Invalid value for #{$map-name}: This map must be in ascending order, but key '#{$key}' has value #{$num} which isn't greater than #{$prev-num}, the value of the previous key '#{$prev-key}' !";
+    }
+    $prev-key: $key;
+    $prev-num: $num;
+  }
+}
+
+// Starts at zero
+// Used to ensure the min-width of the lowest breakpoint starts at 0.
+@mixin declare-starts-at-zero($map, $map-name: '$grid-breakpoints') {
+  @if length($map) > 0 {
+    $values: map-values($map);
+    $first-value: nth($values, 1);
+    @if $first-value != 0 {
+      @warn 'First breakpoint in #{$map-name} must start at 0, but starts at #{$first-value}.';
+    }
+  }
+}

@@ -1,0 +1,23 @@
+// @todo add a possible custom value parameter not pre-set from the variable
+@mixin side-padding($gutter: $container-padding-x) {
+  padding-right: var(--#{$var-prefix}gutter-x, #{$gutter});
+  padding-left: var(--#{$var-prefix}gutter-x, #{$gutter});
+}
+
+// @deprecated Keeping here for backwards compat for now
+// @todo remove all uses of this and delete
+// Side Padding for containers
+// @mixin side-padding {
+//   padding-left: $padding-side-mobile;
+//   padding-right: $padding-side-mobile;
+
+//   @include break-min($md) {
+//     padding-left: $padding-side-tablet;
+//     padding-right: $padding-side-tablet;
+//   }
+
+//   @include break-min($xl) {
+//     padding-left: $padding-side-desktop;
+//     padding-right: $padding-side-desktop;
+//   }
+// }
