@@ -4,7 +4,7 @@ const merge = require('webpack-merge')
 const WriteFilePlugin = require('write-file-webpack-plugin')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const baseConfig = require('./webpack.common.js')
+const baseConfig = require('./webpack.common')
 const {
   HOST,
   BROWSER_SYNC_PORT,
@@ -12,8 +12,8 @@ const {
   PATHS,
   HOMEDIR,
 } = require('./env.config')
-var fs = require('fs')
-const SSLFILES = '/.config/valet/Certificates/' + HOST
+// var fs = require('fs')
+// const SSLFILES = '/.config/valet/Certificates/' + HOST
 
 /**
  * This is the development config for webpack which
@@ -58,14 +58,14 @@ const webpackConfig = merge(baseConfig, {
       '**': {
         target: hostUrl,
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
     },
     http2: true,
-    https: {
-      key: fs.readFileSync(HOMEDIR + SSLFILES + '.key'),
-      cert: fs.readFileSync(HOMEDIR + SSLFILES + '.crt'),
-    },
+    // https: {
+    //   key: fs.readFileSync(`${HOMEDIR + SSLFILES}.key`),
+    //   cert: fs.readFileSync(`${HOMEDIR + SSLFILES}.crt`),
+    // },
     stats: {
       all: false,
       colors: true,
@@ -96,16 +96,16 @@ const webpackConfig = merge(baseConfig, {
       host: HOST,
       port: BROWSER_SYNC_PORT,
       proxy: `${hostUrl}`,
-      https: {
-        key: HOMEDIR + SSLFILES + '.key',
-        cert: HOMEDIR + SSLFILES + '.crt',
-      },
+      // https: {
+      //   key: `${HOMEDIR + SSLFILES}.key`,
+      //   cert: `${HOMEDIR + SSLFILES}.crt`,
+      // },
       // bypass webpack-dev-server to fix webfont/cors issue
       // proxy: `${HOST}:${WEBPACK_DEV_SERVER_PORT}`,
       files: [
         `${PATHS.theme()}/**/*.php`,
         `${PATHS.src()}/**/*.js`,
-        `${PATHS.src()}/**/*.scss`
+        `${PATHS.src()}/**/*.scss`,
       ],
     },
     {

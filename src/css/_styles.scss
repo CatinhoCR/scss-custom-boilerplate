@@ -1492,3 +1492,322 @@ button,
 .button {
   cursor: pointer;
 }
+
+// Buttons
+.button {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  color: $white;
+  background-color: $green;
+  border: 1px solid $green;
+  height: rem(42);
+  // border-radius: rem(4);
+  padding: rem(8) rem(30);
+  text-transform: capitalize;
+  display: inline-flex;
+  font-size: rem(14);
+  line-height: 1;
+  font-weight: $bold-weight;
+  letter-spacing: 0;
+  text-decoration: none;
+  align-self: center;
+  text-align: center;
+  align-items: center;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+  justify-content: space-between;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($green, 10%);
+    border-color: darken($green, 10%);
+    color: $white;
+  }
+
+  &--hov {
+    &-lighten {
+      &:hover {
+        background-color: scale-color($green, $lightness: 20%);
+        border-color: scale-color($green, $lightness: 20%);
+      }
+    }
+  }
+
+  // TODO: Focus states
+  &:focus {
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+  }
+
+  &--sws {
+    box-shadow: none;
+    border: 1px solid $red;
+  }
+
+  &__text {
+    color: inherit;
+    font-weight: inherit;
+    text-transform: inherit;
+  }
+
+  &__icon {
+    width: rem(16);
+    height: rem(16);
+    font-size: rem(16);
+  }
+
+  // Small Sized Button
+  &--sm {
+    padding: rem(12) rem(16);
+  }
+
+  // Large Sized Button
+  &--lg {
+    padding: rem(13) rem(30);
+    height: rem(52);
+    font-size: rem(15);
+  }
+
+  // Full width
+  &--full {
+    padding: rem(16) rem(30);
+    height: rem(52);
+    font-size: rem(16);
+    width: 100%;
+  }
+
+  // Pill Shaped Buttons
+  &--pill {
+    border-radius: rem(21);
+
+    &.button {
+      &--lg {
+        border-radius: rem(26);
+      }
+    }
+  }
+
+  // Circle Shaped Buttons
+  &--circle {
+    border-radius: 50%;
+    width: rem(36);
+    height: rem(36);
+    padding: 0;
+    justify-content: center;
+
+    &:focus::before {
+      border-radius: 50%;
+    }
+
+    &.button {
+      &--md {
+        width: 48px;
+        height: 48px;
+
+        .button {
+          &__icon {
+            width: rem(18);
+            height: rem(18);
+            font-size: rem(18);
+          }
+        }
+      }
+
+      &--lg {
+        width: 60px;
+        height: 60px;
+
+        .button {
+          &__icon {
+            width: rem(20);
+            height: rem(20);
+            font-size: rem(20);
+          }
+        }
+      }
+
+      &--xl {
+        width: 80px;
+        height: 80px;
+
+        .button {
+          &__icon {
+            width: rem(24);
+            height: rem(24);
+            font-size: rem(24);
+          }
+        }
+      }
+    }
+
+    &:hover {
+      transform: scale($circle-button-scale);
+    }
+  }
+
+  // Button's & Icons
+  &--with-icon {
+    .button {
+      &__text {
+        margin-left: 0;
+        margin-right: rem(10);
+        transform: translateX(-10px);
+      }
+
+      &__icon {
+        margin-left: rem(20);
+        transform: translateX(10px);
+      }
+    }
+  }
+
+  // TODO: Icons colors and props
+  &--outline {
+    background-color: transparent;
+    color: $green;
+
+    &:hover {
+      background-color: $green;
+      color: $white;
+    }
+  }
+  // TODO: Buttons with Text-Icon
+  // TODO: Circle buttons
+}
+
+// Forms Basic
+.form {
+  padding: rem(20) rem(40);
+
+  &__field {
+    width: 100%;
+    background-color: $white;
+    max-width: 100%;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 4%), 0 4px 7px rgb(0 0 0 / 8%);
+    padding: rem(8) rem(21);
+    height: rem(42);
+    margin-bottom: rem(20);
+  }
+}
+
+// Color Classes Overrides
+@each $key, $value in $theme-colors {
+  .text-#{$key} {
+    color: $value !important;
+  }
+
+  .bg-#{$key} {
+    background-color: $value !important;
+  }
+
+  .border-color-#{$key} {
+    border-color: $value !important;
+  }
+
+  .fill-#{$key} {
+    fill: $value !important;
+  }
+
+  .button {
+    &--#{$key} {
+      background-color: $value;
+      border-color: $value;
+
+      &:hover {
+        background-color: darken($value, 10%);
+        border-color: darken($value, 10%);
+      }
+
+      // color of focus outline
+      &:focus::before {
+        border-color: $value;
+      }
+
+      &.button {
+        &--hov {
+          &-lighten {
+            &:hover {
+              background-color: scale-color($value, $lightness: 20%);
+              border-color: scale-color($value, $lightness: 20%);
+            }
+          }
+        }
+
+        &--outline {
+          background-color: transparent;
+          color: $value;
+
+          .fxm-icon {
+            color: $value;
+
+            path {
+              fill: $value;
+            }
+          }
+
+          &:hover {
+            border-color: $value;
+            background-color: $value;
+            color: $white !important;
+
+            .fxm-icon {
+              color: transparent;
+
+              /* stylelint-disable-next-line */
+              path {
+                fill: transparent;
+              }
+            }
+          }
+
+          &-reverse {
+            background-color: $value;
+            color: $white;
+
+            &:hover {
+              background-color: transparent;
+              color: $value;
+            }
+          }
+        }
+      }
+    }
+
+    &--with-icon-#{$key} {
+      .ui-icon {
+        path {
+          fill: $value;
+        }
+      }
+    }
+  }
+}
+
+/*
+This .scss loop will create "margin helpers" and "padding helpers" for use in your web projects.
+It will generate several classes such as:
+.m-r-10 which gives margin-right 10 pixels.
+.m-r-15 gives MARGIN to the RIGHT 15 pixels.
+.m-t-15 gives MARGIN to the TOP 15 pixels and so on.
+.p-b-5 gives PADDING to the BOTTOM of 5 pixels
+.p-l-40 gives PADDING to the LEFT of 40 pixels
+The first letter is "m" or "p" for MARGIN or PADDING
+Second letter is "t", "b", "l", or "r" for TOP, BOTTOM, LEFT, or RIGHT
+Third letter is the number of spacing in pixels. Adjust the amounts generated by editing the $spaceamounts variable below.
+*/
+
+$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100); // Adjust this to include the pixel amounts you need.
+$sides: (top, bottom, left, right); // Leave this variable alone
+
+@each $space in $spaceamounts {
+  @each $side in $sides {
+    .m-#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{$space}px !important;
+    }
+
+    .p-#{str-slice($side, 0, 1)}-#{$space} {
+      padding-#{$side}: #{$space}px !important;
+    }
+  }
+}

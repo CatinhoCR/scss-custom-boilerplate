@@ -16,16 +16,16 @@ const isDevelopment = env === 'development'
 
 module.exports = {
   // Point this to our main source js file
-  entry: {
-    app: PATHS.src('js', 'app.js'),
-    // guteditor: PATHS.src('js', 'gut-editor.js'),
-  },
+  // entry: {
+  //   app: PATHS.src('js', 'app.js'),
+  // guteditor: PATHS.src('js', 'gut-editor.js'),
+  // },
 
   // Point to our build folder for the compiled js file
-  output: {
-    path: PATHS.build(),
-    filename: '[name].js',
-  },
+  // output: {
+  //   path: PATHS.build(),
+  //   filename: '[name].js',
+  // },
 
   // Extract CSS into the main.css file
   plugins: [
