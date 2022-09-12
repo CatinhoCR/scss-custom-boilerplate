@@ -1,29 +1,32 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const merge = require('webpack-merge')
-const TerserPlugin = require('terser-webpack-plugin')
-const baseConfig = require('./webpack.common.js')
-// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
+const { merge } = require('webpack-merge');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
-/**
- * This is the production config for webpack which
- * uses the TerserPlugin to minify the output.
- */
+const common = require('./webpack.common');
 
-module.exports = merge(baseConfig, {
+module.exports = merge(common, {
   mode: 'production',
 
-  // Show performance hints if dependencies get too heavy
-  performance: {
-    hints: 'warning',
-  },
+  /* Manage source maps generation process. Refer to https://webpack.js.org/configuration/devtool/#production */
+  devtool: false,
 
-  // Minify and compress javascript with the TerserPlugin
+  /* Optimization configuration */
   optimization: {
+    minimize: true,
     minimizer: [
-      // new CssMinimizerPlugin(),
       new TerserPlugin({
-        extractComments: false,
+        parallel: true,
       }),
+      new CssMinimizerPlugin(),
     ],
   },
-})
+
+  /* Performance treshold configuration values */
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
+
+  /* Additional plugins configuration */
+  plugins: [],
+});

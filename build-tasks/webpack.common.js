@@ -1,6 +1,28 @@
-/* eslint-disable import/no-extraneous-dependencies */
+const path = require('path');
+const fs = require('fs');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+// const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { PATHS } = require('./env.config')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const Sass = require('sass')
+
+const webpack = require('webpack')
+
+const environment = require('./env.config')
+
+// Maybe delete or tweak
+const templateFiles = fs.readdirSync(environment.paths.src)
+  .filter((file) => path.extname(file).toLowerCase() === '.html');
+
+const htmlPluginEntries = templateFiles.map((template) => new HtmlWebpackPlugin({
+  inject: true,
+  hash: false,
+  // title: environment.title,
+  filename: template,
+  template: path.resolve(environment.paths.src, template),
+  favicon: path.resolve(environment.paths.src, 'images', 'favicon.png'),
+}));
 
 /**
  * This is the base config for webpack which is used
@@ -10,55 +32,50 @@ const { PATHS } = require('./env.config')
  * output (built) files as well as loaders for js,
  * css, fonts, images and Modernizr.
  */
+ const env = process.env.NODE_ENV
+ const isDevelopment = env === 'development'
 
-const env = process.env.NODE_ENV
-const isDevelopment = env === 'development'
+if (isDevelopment) {
+// only enable hot in development
+  plugins.push(new webpack.HotModuleReplacementPlugin())
+}
 
 module.exports = {
-  // Point this to our main source js file
-  // entry: {
-  //   app: PATHS.src('js', 'app.js'),
-  // guteditor: PATHS.src('js', 'gut-editor.js'),
-  // },
+  // Where webpack looks to start building the bundle
+  entry: {
+    app: path.resolve(environment.paths.src, 'index.js'),
+  },
 
-  // Point to our build folder for the compiled js file
-  // output: {
-  //   path: PATHS.build(),
-  //   filename: '[name].js',
-  // },
-
-  // Extract CSS into the main.css file
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'main.css',
-    }),
-  ],
+  // Where webpack outputs the assets and bundles
+  output: {
+    path: environment.paths.build,
+    filename: '[name].bundle.js',
+  },
 
   module: {
     rules: [
-      // Use babel-loader to transpile js for non-ES6 browsers
-      // Use eslint-loader to emit eslint messages to the browser console
       {
-        test: /\.js$/,
-        exclude: /node_modules\/(?!(dom7|swiper)\/).*/,
-        use: ['babel-loader', 'eslint-loader'],
-        include: PATHS.src(),
+        test: /\.html$/i,
+        loader: 'html-loader',
       },
-
-      // Since we are using sass, we need a couple of loaders to handle it
-      // @todo add admin dashboard styles
-      // @todo modularize css output
-      // @see https://medium.com/clover-platform-blog/modular-scss-and-why-you-need-it-6bb2d8c40fd8
+      // {
+      //   test: /\.((c|sa|sc)ss)$/i,
+      //   use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+      // },
       {
         test: /\.scss$/,
         use: [
+          {
+            loader: 'style-loader',
+          },
           // Enable hot module replacement for CSS when in development mode
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: isDevelopment,
+              esModule: false,
             },
           },
+          // isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
 
           // The css-loader interprets @import and url() like
           // import/require() and will resolve them
@@ -76,8 +93,8 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               sourceMap: isDevelopment,
-              config: {
-                path: './build-tasks/postcss.config.js',
+              postcssOptions: {
+                config: path.resolve(environment.paths.config, 'postcss.config.js')
               },
             },
           },
@@ -85,27 +102,106 @@ module.exports = {
           // The sass-loader compoiles scss to css
           {
             loader: 'sass-loader',
-            options: { sourceMap: isDevelopment },
+            options: {
+              // Prefer `dart-sass`
+              implementation: Sass,
+              sourceMap: isDevelopment,
+            },
           },
         ],
       },
-
-      // Use file-loader for fonts and images in the css
       {
-        test: /\.(woff(2)?|ttf|eot|svg|jpe?g|png|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-          },
-        ],
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
       },
-
-      // Expose the custom Modernizr build as Modernizr to the main js
-      // when imported. See src/js/app.js for use.
+      // {
+      //   test: /\.(png|gif|jpe?g|svg)$/i,
+      //   type: 'asset',
+      //   parser: {
+      //     dataUrlCondition: {
+      //       maxSize: environment.limits.images,
+      //     },
+      //   },
+      //   generator: {
+      //     filename: 'images/design/[name].[hash:6][ext]',
+      //   },
+      // },
       {
-        test: /modernizr\.js$/,
-        loader: 'imports-loader?this=>window!exports-loader?window.Modernizr',
+        test: /\.(eot|ttf|woff|woff2)$/,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: environment.limits.images,
+          },
+        },
+        generator: {
+          filename: 'images/design/[name].[hash:6][ext]',
+        },
       },
     ],
+  },
+
+  // optimization: {
+  //   minimizer: [
+  //     '...',
+  //     new ImageMinimizerPlugin({
+  //       minimizer: {
+  //         implementation: ImageMinimizerPlugin.imageminMinify,
+  //         options: {
+  //           // Lossless optimization with custom option
+  //           // Feel free to experiment with options for better result for you
+  //           plugins: [
+  //             ['gifsicle', { interlaced: true }],
+  //             ['jpegtran', { progressive: true }],
+  //             ['optipng', { optimizationLevel: 5 }],
+  //             // Svgo configuration here https://github.com/svg/svgo#configuration
+  //             [
+  //               'svgo',
+  //               {
+  //                 plugins: [
+  //                   {
+  //                     name: 'removeViewBox',
+  //                     active: false,
+  //                   },
+  //                 ],
+  //               },
+  //             ],
+  //           ],
+  //         },
+  //       },
+  //     }),
+  //   ],
+  // },
+
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+    }),
+    new CleanWebpackPlugin({
+      verbose: true,
+      cleanOnceBeforeBuildPatterns: ['**/*', '!stats.json'],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(environment.paths.src, 'images', 'content'),
+          to: path.resolve(environment.paths.build, 'images', 'content'),
+          toType: 'dir',
+          globOptions: {
+            ignore: ['*.DS_Store', 'Thumbs.db'],
+          },
+        },
+      ],
+    }),
+  ].concat(htmlPluginEntries),
+
+  resolve: {
+    modules: [environment.paths.src, 'node_modules'],
+    extensions: ['.js', '.jsx', '.json'],
+    alias: {
+      '@': environment.paths.src,
+      assets: environment.paths.public,
+    },
   },
 }

@@ -1,0 +1,21 @@
+// Generate List for color gradients
+@mixin color-list() {
+  // rgba($warm-white, 1)
+}
+
+// Generates a Background Gradient
+// @param direction - left || top || bottom || right
+// @param list - A list of colors and optional percentages
+// List Example: list1: $blue, $green, $orange;
+// List Example2: list2: $blue 0%,$blue 33%,$green 33%,$green 66%, $orange 66%, $orange 100%;
+@mixin bg-gradient($direction, $list) {
+  background: linear-gradient(string.unquote($direction), $list);
+}
+
+@mixin txt-gradient($color: $brand-purple, $grad: $grad-text, $direction: '90deg') {
+  color: $color;
+
+  @include bg-gradient($direction, $grad);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

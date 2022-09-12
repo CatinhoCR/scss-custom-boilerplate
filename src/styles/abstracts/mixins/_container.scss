@@ -1,0 +1,9 @@
+// Container mixins
+// TODO max-width
+@mixin container($size: 100%, $gutter: $padding-side-desktop) {
+  @include side-padding($gutter);
+  width: 100%;
+  // max-width: $size;
+  margin-right: auto;
+  margin-left: auto;
+}

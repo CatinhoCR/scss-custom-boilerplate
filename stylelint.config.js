@@ -110,4 +110,4 @@ module.exports = {
     'value-list-max-empty-lines': 0,
     'value-no-vendor-prefix': true,
   },
-};
+}
