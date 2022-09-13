@@ -1,0 +1,51 @@
+// Single container class with breakpoint max-widths
+%container,
+.container,
+// 100% wide container at all breakpoints
+.container-full {
+  @include container;
+}
+
+.container-full {
+  max-width: 100%;
+}
+
+// Responsive containers that are 100% wide until a breakpoint
+@each $breakpoint, $container-width in $container-widths {
+  .container-#{$breakpoint} {
+    @extend %container;
+  }
+
+  @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+    %responsive-container-#{$breakpoint} {
+      max-width: #{$container-width};
+    }
+
+    // Extend each breakpoint which is smaller or equal to the current breakpoint
+    $extend-breakpoint: true;
+
+    @each $name, $width in $grid-breakpoints {
+      @if $extend-breakpoint {
+        .container#{breakpoint-infix($breakpoint, $grid-breakpoints)} {
+          @extend %responsive-container-#{$breakpoint};
+        }
+      }
+      // Once the current breakpoint is reached, stop extending
+      @if $breakpoint == $name {
+        $extend-breakpoint: false;
+      }
+    }
+  }
+}
+
+// Row classes
+.row {
+  @include row;
+
+  > * {
+    @include make-col-ready;
+  }
+}
+
+// Make Columns
+@include make-grid-columns;

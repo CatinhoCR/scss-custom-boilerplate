@@ -1,0 +1,74 @@
+@each $key, $value in $theme-colors {
+  .text-#{$key} {
+    color: $value !important;
+  }
+
+  .bg-#{$key} {
+    background-color: $value !important;
+  }
+
+  .border-color-#{$key} {
+    border-color: $value !important;
+  }
+
+  .fill-#{$key} {
+    fill: $value !important;
+  }
+
+  .button {
+    &--#{$key} {
+      background-color: $value;
+      border-color: $value;
+
+      &:hover {
+        background-color: color.scale($value, $lightness: -10%);
+        border-color: color.scale($value, $lightness: -10%);
+      }
+
+      // color of focus outline
+      &:focus::before {
+        border-color: $value;
+      }
+
+      &.button {
+        &--hov {
+          &-lighten {
+            &:hover {
+              background-color: color.scale($value, $lightness: 20%);
+              border-color: color.scale($value, $lightness: 20%);
+            }
+          }
+        }
+
+        &--outline {
+          background-color: transparent;
+          color: $value;
+
+          &:hover {
+            border-color: $value;
+            background-color: $value;
+            color: $white !important;
+          }
+
+          &-reverse {
+            background-color: $value;
+            color: $white;
+
+            &:hover {
+              background-color: transparent;
+              color: $value;
+            }
+          }
+        }
+      }
+    }
+
+    &--with-icon-#{$key} {
+      .ui-icon {
+        path {
+          fill: $value;
+        }
+      }
+    }
+  }
+}

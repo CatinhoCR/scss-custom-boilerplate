@@ -1,0 +1,71 @@
+// font smoothing
+@mixin smoothing {
+  font-feature-settings: 'liga'1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+}
+
+// Truncate lines and use ellipsis
+@mixin truncate-lines($n: 4) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* stylelint-disable value-no-vendor-prefix, property-no-unknown */
+  display: -webkit-box;
+  -webkit-line-clamp: #{$n};
+  box-orient: vertical;
+  -webkit-box-orient: vertical;
+
+  /* xstylelint-enable value-no-vendor-prefix, property-no-unknown */
+}
+
+// Titles
+@mixin heading() {
+  color: $black;
+  line-height: 1;
+  font-family: $font-secondary;
+  font-weight: $bold-weight;
+}
+
+// Text
+@mixin text() {
+  font-family: $font-primary;
+  color: $black;
+  font-size: rem(16);
+  line-height: 1.5;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+}
+
+// Labels
+@mixin label() {
+  font-family: $font-label;
+  color: $label-grey;
+  letter-spacing: 0.5px;
+  display: block;
+  text-transform: uppercase;
+}
+
+// Misc
+@mixin link() {
+  font-family: $font-misc;
+  color: $mid-blue;
+  font-size: rem(16);
+  line-height: 1.5;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+}
+
+// Cursive
+@mixin cursive() {
+  font-family: $font-cursive;
+  color: $black;
+  font-size: rem(22);
+  line-height: 1.5;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+}

@@ -1,119 +1,67 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const WriteFilePlugin = require('write-file-webpack-plugin')
-const StyleLintPlugin = require('stylelint-webpack-plugin')
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const baseConfig = require('./webpack.common')
-const {
-  HOST,
-  BROWSER_SYNC_PORT,
-  WEBPACK_DEV_SERVER_PORT,
-  PATHS,
-  HOMEDIR,
-} = require('./env.config')
-// var fs = require('fs')
-// const SSLFILES = '/.config/valet/Certificates/' + HOST
+const { merge } = require('webpack-merge')
 
-/**
- * This is the development config for webpack which
- * uses auto-reloading for php and js and hot module
- * replacement for css.
- * @todo env homedir and paths host etc
- *
- * We use webpack-dev-server and browser-sync for hot
- * reloading and emit eslint and csslint messages
- * to the browser console.
- */
+const common = require('./webpack.common')
 
-const hostUrl = `https://${HOST}`
+const environment = require('./env.config')
 
-const webpackConfig = merge(baseConfig, {
+module.exports = merge(common, {
+  // Set the mode to development or production
   mode: 'development',
-  watch: true,
-  devtool: 'inline-source-map',
-  stats: false,
 
-  // Turn performance hints off for dev because
-  // our files are not optimized yet
-  performance: { hints: false },
+  // Control how source maps are generated
+  devtool: 'eval-source-map',
+  // devtool: 'inline-source-map',
 
-  // Specify the path of the /build folder for hot updates
-  output: {
-    publicPath: PATHS.build(),
-  },
-
-  // Enable hot reloading through webpack-dev-server
-  // and proxy it to the dev host url
+  // Spin up a server for quick development
   devServer: {
-    open: false,
-    hotOnly: true,
-    host: HOST,
-    port: WEBPACK_DEV_SERVER_PORT,
-    publicPath: PATHS.build(),
-    overlay: {
-      errors: true,
+    static: {
+      directory: environment.paths.build,
+      publicPath: '/',
+      watch: true,
     },
-    proxy: {
-      '**': {
-        target: hostUrl,
-        changeOrigin: true,
-        secure: false,
-      },
+    client: {
+      overlay: true,
     },
-    http2: true,
-    // https: {
-    //   key: fs.readFileSync(`${HOMEDIR + SSLFILES}.key`),
-    //   cert: fs.readFileSync(`${HOMEDIR + SSLFILES}.crt`),
-    // },
-    stats: {
-      all: false,
-      colors: true,
-      errors: true,
-      errorDetails: true,
-      warnings: true,
-    },
+    historyApiFallback: true,
+    open: true,
+    compress: true,
+    hot: true,
+    watchFiles: [
+      `${environment.paths.src}/**/*.html`,
+      `${environment.paths.src}/**/*.scss`,
+      `${environment.paths.src}/**/*.js`
+    ],
+    ...environment.server
   },
 
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+  // File watcher options
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 300,
+    ignored: /node_modules/,
+  },
 
-    // Don't write .hot-update.js files to the file system
-    new WriteFilePlugin({
-      test: /^(?!.*(hot)).*/,
-    }),
+  /*
+  // Define modules rules
+  module: {
+    rules: [
+      // Styles: Inject CSS into the head with source maps
+      {
+        test: /\.(sass|scss|css)$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { sourceMap: true, importLoaders: 1, modules: false },
+          },
+          { loader: 'postcss-loader', options: { sourceMap: true } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
+        ],
+      },
+    ],
+  },
+  */
 
-    // Show stylelint errors as warnings in the browser console
-    new StyleLintPlugin({
-      emitWarning: true,
-    }),
-
-    // Use browsersync to proxy webpack-dev-server
-    // and add auto reloading for php and js. Reload
-    // js to have a full page refresh when src file changes
-    new BrowserSyncPlugin({
-      open: false,
-      host: HOST,
-      port: BROWSER_SYNC_PORT,
-      proxy: `${hostUrl}`,
-      // https: {
-      //   key: `${HOMEDIR + SSLFILES}.key`,
-      //   cert: `${HOMEDIR + SSLFILES}.crt`,
-      // },
-      // bypass webpack-dev-server to fix webfont/cors issue
-      // proxy: `${HOST}:${WEBPACK_DEV_SERVER_PORT}`,
-      files: [
-        `${PATHS.theme()}/**/*.php`,
-        `${PATHS.src()}/**/*.js`,
-        `${PATHS.src()}/**/*.scss`,
-      ],
-    },
-    {
-      // Prevent BrowserSync from reloading the page
-      // and let webpack-dev-server take care of this
-      reload: false,
-    }),
-  ],
+  // Plugins Configs
+  plugins: [],
 })
-
-module.exports = webpackConfig

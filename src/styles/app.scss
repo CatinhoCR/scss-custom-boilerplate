@@ -1,0 +1,30 @@
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:list';
+@use 'sass:color';
+@use 'sass:string';
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans:wght@400;500;700&family=Poppins:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+// Abstracts (Variables, Mixins, Functions)
+@import 'abstracts/functions';
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+
+// Base (Normalizer, Globals, Typography)
+@import 'base/normalize';
+@import 'base/globals';
+@import 'base/typography';
+@import 'base/grid';
+@import 'base/utils';
+
+// Layout
+// Components (smaller partials used inside of blocks - divided for ease of reference)
+@import 'components/buttons';
+
+// Blocks (standalone parts which are direct children of a page)
+// Pages (styles specific to a certain template/page)
+
+// Helpers and Overrides (Inspired in tailwind.css)
+@import 'helpers/color-classes';
+@import 'helpers/spacing-classes';

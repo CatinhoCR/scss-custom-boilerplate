@@ -1,0 +1,30 @@
+.info-card {
+  padding: rem(20) rem(10);
+  border: 1px solid $light-grey;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__icon {
+    color: $red;
+    width: rem(80);
+    max-width: rem(80);
+    transition: transform 0.2s ease;
+    pointer-events: auto;
+
+    &:hover {
+      transform: scale(1.5);
+    }
+  }
+
+  &__title {
+    padding: rem(30);
+  }
+
+  &__text {
+    padding: rem(20) rem(20);
+    margin-bottom: rem(20);
+    flex-grow: 1;
+  }
+}

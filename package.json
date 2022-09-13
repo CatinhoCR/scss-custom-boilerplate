@@ -1,71 +1,61 @@
 {
-  "name": "scss-base",
+  "name": "scss-custom-lib",
   "version": "1.0.0",
-  "description": "Basic SCSS base styles to use as starter point.",
-  "main": "src/js/app.js",
-  "license": "ISC",
-  "repository": "",
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
-    ]
-  },
+  "description": "A starter boilerplate to use for quick templating using Webpack 5, SCSS, Linting, Hot reloading and more... Personal small reusable 'library' of common styles.",
+  "main": "app/app.js",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --config ./build-tasks/webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config ./build-tasks/webpack.prod.js"
+    "build": "webpack --mode=production --config ./build-tasks/webpack.prod.js",
+    "dev": "webpack serve --mode=development --env development --config ./build-tasks/webpack.dev.js",
+    "lint": "eslint 'src/**/*.js' || true",
+    "prettify": "prettier --write 'src/**/*.js'"
   },
-  "author": "Cato",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CatinhoCR/scss-custom-boilerplate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CatinhoCR/scss-custom-boilerplate/issues"
+  },
+  "homepage": "https://github.com/CatinhoCR/scss-custom-boilerplate#readme",
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "autoprefixer": "^9.7.2",
-    "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.0.5",
-    "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-runtime": "^6.20.0",
-    "browser-sync": "^2.26.7",
-    "browser-sync-webpack-plugin": "^2.2.2",
-    "css-loader": "^3.4.2",
-    "css-minimizer-webpack-plugin": "^3.0.2",
-    "eslint": "^6.7.1",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-loader": "^3.0.3",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.19.0",
-    "exports-loader": "^0.7.0",
-    "file-loader": "^6.0.0",
-    "fs-extra": "^9.0.0",
-    "imports-loader": "^0.8.0",
-    "lint-staged": "^10.0.6",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^6.0.1",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^8.0.0",
-    "style-loader": "^1.1.3",
-    "stylelint": "^13.2.1",
-    "stylelint-webpack-plugin": "^1.2.3",
-    "terser-webpack-plugin": "^2.2.1",
-    "webpack": "^5.51.1",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^4.0.0",
-    "webpack-merge": "^4.2.2",
-    "write-file-webpack-plugin": "^4.5.1"
-  },
-  "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "modernizr": "^3.8.0"
-  },
-  "browserslist": [
-    "defaults",
-    "not ie < 11",
-    "last 2 versions",
-    "> 1%",
-    "last 6 iOS versions"
-  ]
+    "@babel/core": "^7.17.8",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "autoprefixer": "^10.4.4",
+    "babel-loader": "^8.2.4",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^4.0.0",
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-webpack": "^0.13.2",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "html-loader": "^4.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "image-minimizer-webpack-plugin": "^3.2.3",
+    "merge": "^2.1.1",
+    "mini-css-extract-plugin": "^2.6.0",
+    "minimist": "^1.2.6",
+    "postcss": "^8.4.12",
+    "postcss-loader": "^7.0.1",
+    "sass": "^1.49.9",
+    "sass-lint": "^1.13.1",
+    "sass-loader": "^13.0.2",
+    "shelljs": "^0.8.5",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.3",
+    "trim-newlines": "^4.0.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3",
+    "webpack-merge": "^5.8.0"
+  }
 }
